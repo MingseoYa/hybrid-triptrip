@@ -22,6 +22,7 @@ interface IApolloSetting {
 }
 
 export default function ApolloSetting(props: IApolloSetting) {
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const [isLoaded, setIsLoaded] = useState(false);
   const { accessToken, setAccessToken } = useAccessTokenStore();
   const { refreshToken } = useRefreshTokenStore();
@@ -55,7 +56,7 @@ export default function ApolloSetting(props: IApolloSetting) {
     }
   });
   const uploadLink = createUploadLink({
-    uri: "https://main-hybrid.codebootcamp.co.kr/graphql",
+    uri: apiUrl,
     headers: {
       "Apollo-Require-Preflight": "true",
       Authorization: `Bearer ${accessToken}`,
