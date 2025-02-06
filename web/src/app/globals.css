@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: var(--font-suit);
+}
+
+html {
+  /* 피그마기본가로(360) : HTML기본폰트(16) = 내기계사이즈(100vw) : 조정폰트(x) */
+  font-size: calc((40 / 9) * 1vw);
+}
