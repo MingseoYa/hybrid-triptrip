@@ -1,0 +1,38 @@
+.header {
+  position: fixed;
+  display: flex;
+  padding: 0 1.25rem;
+  width: 100%;
+  height: 3rem;
+  align-items: center;
+  gap: 0.5rem;
+  z-index: 1100;
+}
+
+.logo {
+  display: flex;
+  width: 3.25rem;
+  height: 2rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: "SUIT Variable";
+  font-size: 1.125rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 1.5rem; /* 133.333% */
+}
+
+.exit {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.back {
+  width: 1.5rem;
+  height: 1.5rem;
+}
