@@ -3,10 +3,13 @@ import styles from "./styles.module.css";
 import Link from "next/link";
 
 export default function PlaceCard({ data }) {
+  const imageUrl = data?.images?.length
+    ? `https://storage.googleapis.com/${data.images[0]}`
+    : "/images/triptrip.png";
   return (
     <Link className={styles.card} href={`/solplace-logs/${data.id}`}>
       <Image
-        src={`https://storage.googleapis.com/${data.images[0]}`}
+        src={imageUrl}
         width={0}
         height={0}
         sizes="100vw"

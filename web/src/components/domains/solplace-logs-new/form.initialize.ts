@@ -7,6 +7,8 @@ import { ISchema } from "./form.schema";
 import { useImageStore } from "@/commons/stores/image-store";
 import { gql, useMutation } from "@apollo/client";
 import { webviewlog } from "@/commons/libraries/webview-log";
+import { UPLOAD_FILE } from "@/commons/apis/mutations/upload.file";
+import { imageToFile } from "@/commons/libraries/image-to-file";
 
 const CREATE_SOLPLACE_LOG = gql`
   mutation createSolplaceLog($createSolplaceLogInput: CreateSolplaceLogInput!) {
@@ -15,12 +17,27 @@ const CREATE_SOLPLACE_LOG = gql`
       title
       contents
       address
+      images
     }
   }
 `;
 
 export const useInitialize = (methods: UseFormReturn<ISchema>) => {
-  const [createSolplaceLog] = useMutation(CREATE_SOLPLACE_LOG);
+  const [createSolplaceLog] = useMutation(CREATE_SOLPLACE_LOG, {
+    update: (cache, { data }) => {
+      if (!data?.createSolplaceLog) return;
+
+      cache.modify({
+        fields: {
+          fetchSolplaceLogs(existingLogs = []) {
+            return [data.createSolplaceLog, ...existingLogs]; // 새로운 로그 추가
+          },
+        },
+      });
+    },
+  });
+
+  const [uploadFile] = useMutation(UPLOAD_FILE);
   const router = useRouter();
   // 쿼리스트링에서 뽑기
   const searchParams = useSearchParams();
@@ -35,6 +52,19 @@ export const useInitialize = (methods: UseFormReturn<ISchema>) => {
 
   // 등록하기 버튼 클릭 시
   const onSubmit = async (data: ISchema) => {
+    const imageDecoded = images.map((el) => {
+      return imageToFile(el);
+    });
+
+    const imageResult = await Promise.all(
+      imageDecoded.map(
+        async (el) => await uploadFile({ variables: { file: el } })
+      )
+    );
+
+    const imageResultUrls = imageResult.map(
+      (el) => el.data?.uploadFile.url ?? ""
+    );
     const { title, contents, address } = data;
     webviewlog(data);
     try {
@@ -44,15 +74,18 @@ export const useInitialize = (methods: UseFormReturn<ISchema>) => {
             title,
             contents,
             address,
-            images: [],
+            images: imageResultUrls,
           },
         },
       });
       webviewlog(result);
+      console.log(result);
       fetchApp({ query: "requestDeviceNotificationsForPermissionSet" });
       fetchApp({
         query: "createDeviceNotificationsForSubmitSet",
-        variables: { page: `/solplace-logs/${result.data.id}` },
+        variables: {
+          page: `/solplace-logs/${result?.data.createSolplaceLog.id}`,
+        },
       });
     } catch (error) {
       webviewlog(error);

@@ -24,7 +24,7 @@ export default function PlaceInfo() {
   return (
     <div className={styles.detailInfo}>
       <div className={styles.header}>
-        <div className={styles.headerTitle}>Bramble & Brioche 한남점</div>
+        <div className={styles.headerTitle}>{data?.fetchSolplaceLog.title}</div>
         <Link href={`/solplace-logs/${solplaceLogId}/edit`}>
           <Image
             className={styles.icon24}
@@ -49,7 +49,7 @@ export default function PlaceInfo() {
               alt="location"
             />
             <div className={styles.addressTitle}>
-              서울특별시 용산구 이태원로49길 24-14
+              {data?.fetchSolplaceLog.address}
             </div>
           </div>
 

@@ -24,36 +24,36 @@ export default function SolplaceLogsDetailImageSlider() {
   const { fetchApp } = useDeviceSetting();
 
   const onClickFullScreen = () => {
-    // 로딩 처리
     setIsLoading(true);
 
-    // 다음 틱(턴)으로 넘기기
     window.setTimeout(() => {
-      fetchApp({ query: "toggleDeviceLayoutForNotchTranslucentSet" }); // 노치 없애기
+      fetchApp({ query: "toggleDeviceLayoutForNotchTranslucentSet" });
       fetchApp({
         query: "setDeviceLayoutForNotchContentSet",
         variables: { notchContent: "dark" },
       });
       window.setTimeout(() => {
-        setIsLoading(false); // 로딩 해제
+        setIsLoading(false);
       }, 100);
     }, 100);
   };
+
   webviewlog(isLoading);
 
   if (isLoading) return <></>;
+
+  const slideImages = images?.length
+    ? images.map((image) => `https://storage.googleapis.com/${image}`)
+    : ["/images/triptrip.png"];
 
   return (
     <div className={styles.container}>
       <Swiper
         modules={[Pagination]}
-        pagination={{
-          clickable: true,
-          type: "fraction",
-        }}
+        pagination={{ clickable: true, type: "fraction" }}
         slidesPerView={1}
       >
-        {images?.map((image, index) => (
+        {slideImages.map((src, index) => (
           <SwiperSlide key={index}>
             <Link
               href={`/solplace-logs/${solplaceLogId}/${index}`}
@@ -61,7 +61,7 @@ export default function SolplaceLogsDetailImageSlider() {
             >
               <Image
                 onClick={onClickFullScreen}
-                src={`https://storage.googleapis.com/${image}`}
+                src={src}
                 alt={`Slide ${index + 1}`}
                 width={0}
                 height={0}
