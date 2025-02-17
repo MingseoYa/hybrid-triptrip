@@ -5,7 +5,7 @@
 - 개발 기간: 2024.11 ~ 2024.12 (약 3주)
 - Frontend: Next.js 14 (App Router, TypeScript)
 - Mobile: React Native (WebView 통신)
-- API: GraphQL (Aollo client)
+- API: GraphQL (Apollo client)
 - State Management: Apollo Client (Cache), zustand (accessToken, refresthToken)
 
 ## 📸 스크린샷
